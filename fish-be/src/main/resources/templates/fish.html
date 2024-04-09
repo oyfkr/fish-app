@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>물고기 입력하기</title>
+</head>
+<body>
+<h2>물고기 입력하기</h2>
+
+<button type="button" id="addRowButton">행 추가</button>
+<button type="button" id="deleteRowButton">행 삭제</button>
+<label for="clientInput">거래처 입력:</label>
+<input type="text" id="clientInput" name="clientInput">
+<p>날짜를 선택해주세요. <input type="text" id="datepicker"></p>
+<label for="inputField">현재 페이지 :</label>
+<input type="text" id="inputField">
+<button id="decreaseButton">←</button>
+<button id="increaseButton">→</button>
+
+
+<table id="dataTable" border="1">
+  <thead>
+  <tr>
+    <th>제품코드</th>
+    <th>제품명</th>
+    <th>중량</th>
+    <th>수량</th>
+    <th>단위</th>
+    <th>단가</th>
+    <th>총금액</th>
+    <th>비고</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+  </tr>
+  </tbody>
+</table>
+
+<button type="button" id="saveButton">저장</button>
+<button type="button" id="fetchButton">조회</button>
+<script src="fish.js"></script>
+</body>
+</html>
