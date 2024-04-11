@@ -9,6 +9,8 @@ import fish.fish.domain.deal.dto.DealDTO
 import fish.fish.domain.deal.repository.DealItemRepository
 import fish.fish.domain.deal.repository.DealRepository
 import fish.fish.domain.fish.repository.FishRepository
+import fish.fish.support.exception.BaseException
+import fish.fish.support.exception.ErrorType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -45,7 +47,7 @@ class DealService(
         val dealItemCreateRequests = dealCreateRequest.dealItemCreateRequests
 
         for(dealItemCreateRequest in dealItemCreateRequests) {
-            val fish = fishRepository.findByName(dealItemCreateRequest.fishName) ?: throw Exception("물고기 예외") // 예외처리 필요
+            val fish = fishRepository.findByName(dealItemCreateRequest.fishName) ?: throw BaseException(ErrorType.FISH_NOT_FOUNT) // 예외처리 필요
 
             val dealItem = DealItem(
                 id = null, fish = fish, deal = savedDeal, weight = dealItemCreateRequest.weight,

@@ -39,6 +39,10 @@ dependencies {
 	kapt ("com.querydsl:querydsl-apt:5.0.0:jakarta")
 	kapt ("jakarta.annotation:jakarta.annotation-api")
 	kapt ("jakarta.persistence:jakarta.persistence-api")
+
+	// 로그 디펜던시
+	implementation("io.github.oshai:kotlin-logging-jvm:5.1.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
 
 allOpen { // 추가적으로 열어줄 allOpen
