@@ -12,7 +12,7 @@ class DealItemCreateRequest(
 
     var quantity: Int,
 
-    var unit: Int,
+    var unit: String,
 
     var unitPrice: Int,
 

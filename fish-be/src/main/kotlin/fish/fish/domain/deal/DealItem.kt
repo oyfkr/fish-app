@@ -27,7 +27,7 @@ class DealItem(
     var quantity: Int,
 
     @Column(name = "unit")
-    var unit: Int,
+    var unit: String,
 
     @Column(name = "unit_price")
     var unitPrice: Int,

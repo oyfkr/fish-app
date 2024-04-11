@@ -9,7 +9,7 @@ class DealItemDTO(
     var fish: FishDTO,
     var weight: Int,
     var quantity: Int,
-    var unit: Int,
+    var unit: String,
     var unitPrice: Int,
     var totalPrice: Int,
     var note: String?
