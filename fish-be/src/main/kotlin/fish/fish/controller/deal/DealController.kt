@@ -1,17 +1,12 @@
 package fish.fish.controller.deal
 
 import fish.fish.controller.deal.request.DealCreateRequest
+import fish.fish.controller.deal.request.DealModifyRequest
 import fish.fish.domain.deal.dto.DealDTO
 import fish.fish.service.DealService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
@@ -41,5 +36,13 @@ class DealController(
         val dealDTO : DealDTO? = dealService.getDealByCntAndDate(cnt, dealDate)
 
         return ResponseEntity.ok(dealDTO);
+    }
+
+    @PatchMapping("/deal/{id}")
+    fun modifyDeal(@PathVariable id : Long, @RequestBody dealModifyRequest: DealModifyRequest) : ResponseEntity<DealDTO> {
+
+        val dealDTO : DealDTO = dealService.modifyDeal(id, dealModifyRequest)
+
+        return ResponseEntity.ok(dealDTO)
     }
 }

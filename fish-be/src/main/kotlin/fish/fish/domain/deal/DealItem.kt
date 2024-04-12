@@ -1,5 +1,6 @@
 package fish.fish.domain.deal
 
+import fish.fish.controller.deal.request.DealItemModifyRequest
 import fish.fish.domain.client.Client
 import fish.fish.domain.fish.Fish
 import jakarta.persistence.*
@@ -38,4 +39,18 @@ class DealItem(
     @Column(name = "note")
     var note: String?
 ) {
+
+    fun modifyDealItem(dealItemModifyRequest: DealItemModifyRequest, fish: Fish) {
+        this.fish = fish
+        this.weight = dealItemModifyRequest.weight
+        this.quantity = dealItemModifyRequest.quantity
+        this.unit = dealItemModifyRequest.unit
+        this.unitPrice = dealItemModifyRequest.unitPrice
+        this.totalPrice = dealItemModifyRequest.totalPrice
+        this.note = dealItemModifyRequest.note
+    }
+
+    fun isEqualFish(name: String) : Boolean {
+        return this.fish.name == name
+    }
 }

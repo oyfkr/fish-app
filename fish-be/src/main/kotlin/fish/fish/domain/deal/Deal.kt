@@ -1,5 +1,6 @@
 package fish.fish.domain.deal
 
+import fish.fish.controller.deal.request.DealModifyRequest
 import fish.fish.domain.account.Account
 import fish.fish.domain.client.Client
 import jakarta.persistence.*
@@ -44,4 +45,17 @@ class Deal(
     @Column(name = "modified_date")
     var modifiedDate: LocalDateTime?
 ) {
+
+    fun isEqualClient(name: String) : Boolean {
+        return this.client.name == name
+    }
+
+    fun modifyClient(client : Client) {
+        this.client = client
+    }
+
+    fun modifyDeal(dealModifyRequest: DealModifyRequest) : Deal {
+        this.dealDate = dealModifyRequest.dealDate
+        return this
+    }
 }
