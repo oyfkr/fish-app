@@ -679,13 +679,13 @@
       url: `http://localhost:8080/deal/now-page-cnt?dealDate=${date}`,
       method: "get",
       beforeSend: function (res) {
-        $("#loading-wrap").removeClass("d-none");
+        $(".loading-wrap").removeClass("d-none");
       },
       success: function (data, status, xhr) {
         console.log("data > ", data);
         $("#number").val(data + 1);
         currentCnt = data + 1;
-        $("#loading-wrap").addClass("d-none");
+        $(".loading-wrap").addClass("d-none");
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -723,7 +723,7 @@
       method: "get",
       async: false,
       beforeSend: function (res) {
-        $("#loading-wrap").removeClass("d-none");
+        $(".loading-wrap").removeClass("d-none");
       },
       success: function (data, status, xhr) {
         console.log("data > ", data);
@@ -805,7 +805,7 @@
           drawTr(0, 15);
         }
 
-        $("#loading-wrap").addClass("d-none");
+        $(".loading-wrap").addClass("d-none");
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -881,7 +881,7 @@
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Content-type", "application/json");
           xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
-          $("#loading-wrap").removeClass("d-none");
+          $(".loading-wrap").removeClass("d-none");
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
@@ -963,7 +963,7 @@
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Content-type", "application/json");
           xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
-          $("#loading-wrap").removeClass("d-none");
+          $(".loading-wrap").removeClass("d-none");
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
