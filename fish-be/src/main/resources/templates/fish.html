@@ -611,7 +611,7 @@
 </html>
 <script>
   var currentCnt = 0;
-  var deal_id = ''
+  var deal_id = "";
   $(document).ready(function () {
     $("#date").val(getToday());
     drawTr(0, 15);
@@ -727,12 +727,14 @@
       },
       success: function (data, status, xhr) {
         console.log("data > ", data);
-        deal_id = data.id
+
+        deal_id = data.id;
         $("#company").val(data.client);
-        if (data.dealItems && data.dealItems.length > 0) {
+        $("#fish-table-body").html("");
+
+        if (data && data.dealItems.length > 0) {
           $("#save-btn").addClass("d-none");
           $("#modify-btn").removeClass("d-none");
-          $("#fish-table-body").html("");
           for (let i = 0; i < data.dealItems.length; i++) {
             const v = data.dealItems[i];
             const tr = `<tr class="fish-table-tr" id=${v.id}>
