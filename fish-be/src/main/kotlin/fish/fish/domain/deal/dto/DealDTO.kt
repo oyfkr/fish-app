@@ -7,6 +7,7 @@ class DealDTO(
 
         var id: Long?,
         var cnt: Int,
+        val client : String,
         var dealItems: MutableList<DealItemDTO>?
 
 //        var test: String
@@ -16,9 +17,9 @@ class DealDTO(
 
             deal.id ?: throw Exception("id가 null입니다.")
 
-            var dealItemDTOs = deal.dealItem?.map { DealItemDTO.of(it) }?.toMutableList()
+            val dealItemDTOs = deal.dealItem?.map { DealItemDTO.of(it) }?.toMutableList()
 
-            return DealDTO(deal.id, deal.cnt, dealItemDTOs)
+            return DealDTO(deal.id, deal.cnt, deal.client.name, dealItemDTOs)
         }
     }
 }
