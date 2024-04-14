@@ -1,56 +1,699 @@
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>물고기 입력하기</title>
-</head>
-<body>
-<h2>물고기 입력하기</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>물고기 관리자</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+    * {
+      font-family: "Pretendard";
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 14px;
+      word-break: break-all;
+    }
+    .container {
+      min-width: 1320px;
+      overflow-x: scroll;
+    }
+    .plate {
+      background-color: #ece9d8;
+      display: flex;
+    }
+    table {
+      margin-bottom: 0 !important;
+    }
+    table th,
+    table td {
+      vertical-align: middle;
+      background-color: #ece9d8 !important;
+      padding: 4px !important;
+    }
+    table th {
+      text-align: center;
+      width: 70px;
+    }
+    .btn {
+      width: 82px;
+    }
+    .btn-primary {
+      background-color: #ffe0c0;
+      color: #000;
+      border-color: #ccc;
+    }
+    .btn-primary:hover {
+      background-color: #ffca94;
+      border-color: #ccc;
+      color: #000;
+    }
 
-<button type="button" id="addRowButton">행 추가</button>
-<button type="button" id="deleteRowButton">행 삭제</button>
-<label for="clientInput">거래처 입력:</label>
-<input type="text" id="clientInput" name="clientInput">
-<p>날짜를 선택해주세요. <input type="text" id="datepicker"></p>
-<label for="inputField">현재 페이지 :</label>
-<input type="text" id="inputField">
-<button id="decreaseButton">←</button>
-<button id="increaseButton">→</button>
+    .border-box {
+      border: 1px solid #000;
+      position: relative;
+      padding: 12px;
+    }
+    .border-box h6 {
+      position: absolute;
+      top: -10px;
+      left: 6;
+      background-color: #ece9d8;
+      padding: 0 6px;
+      margin-bottom: 0;
+    }
+    .border-box b {
+      width: 30px;
+      margin-right: 8px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      cursor: pointer;
+      align-items: center;
+      display: flex;
+    }
 
+    .side-table {
+      width: 490px;
+    }
+    .side-table td {
+      vertical-align: top;
+    }
 
-<table id="dataTable" border="1">
-  <thead>
-  <tr>
-    <th>제품코드</th>
-    <th>제품명</th>
-    <th>중량</th>
-    <th>수량</th>
-    <th>단위</th>
-    <th>단가</th>
-    <th>총금액</th>
-    <th>비고</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-    <td contenteditable="true"></td>
-  </tr>
-  </tbody>
-</table>
+    .table-2 td {
+      background-color: #c0c0c0 !important;
+    }
 
-<button type="button" id="saveButton">저장</button>
-<button type="button" id="fetchButton">조회</button>
-<script src="fish.js"></script>
-</body>
+    .table-3 thead {
+      position: sticky;
+      top: 0;
+      left: 0;
+    }
+
+    .table-3 th {
+      border: 1px solid #ccc;
+    }
+    .table-3 td {
+      background-color: #fff !important;
+      border: 1px solid #ccc;
+    }
+  </style>
+  <body>
+    <div class="container my-5">
+      <div class="d-flex justify-content-between">
+        <h2>매출 등록</h2>
+        <div class="d-flex align-items-end">
+          <span class="btn btn-sm btn-primary" onclick="save()">저장</span
+          ><span class="btn btn-sm btn-primary ms-1">조회</span>
+        </div>
+      </div>
+      <hr />
+      <div class="plate">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>처리구분</th>
+              <td>
+                <div class="d-flex align-items-center">
+                  <select name="" id="" class="form-select form-select-sm">
+                    <option value="">매출</option>
+                  </select>
+                  <select name="" id="" class="form-select form-select-sm ms-1">
+                    <option value="">일반</option>
+                  </select>
+                </div>
+              </td>
+              <th>작성거래처</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>거래일자</th>
+              <td colspan="5">
+                <div class="d-flex align-items-center">
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="date"
+                  /><span class="btn btn-sm btn-primary ms-1">변경</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>거래처</th>
+              <td>
+                <div class="d-flex align-items-center">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="company"
+                  /><input
+                    type="text"
+                    class="form-control form-control-sm ms-1"
+                  /><span class="btn btn-sm btn-primary ms-1">변경</span>
+                </div>
+              </td>
+              <th>작성순번</th>
+              <td>
+                <div class="d-flex align-items-center">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    id="number"
+                    value="1"
+                  /><span class="btn btn-sm btn-primary ms-1"
+                    ><i class="fa-solid fa-caret-left"></i></span
+                  ><span class="btn btn-sm btn-primary ms-1"
+                    ><i class="fa-solid fa-caret-right"></i
+                  ></span>
+                </div>
+              </td>
+              <th>작성시간</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>전표번호</th>
+              <td colspan="5">
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+            </tr>
+            <tr>
+              <th>예금주</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>담당</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>전화</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>HP</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>팩스</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="10"><hr class="my-0" /></td>
+            </tr>
+            <tr>
+              <th>전일잔액</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>최종거래일</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>입금금액</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>금일합계</th>
+              <td colspan="5">
+                <div class="d-flex align-items-center">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                  /><input
+                    type="text"
+                    class="form-control form-control-sm ms-1"
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>판매담당</th>
+              <td>
+                <select name="" id="" class="form-select form-select-sm">
+                  <option value="">관리자</option>
+                </select>
+              </td>
+              <th>총반품금액</th>
+              <td>
+                <div class="d-flex align-items-center">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                  /><input
+                    type="text"
+                    class="form-control form-control-sm ms-1"
+                  />
+                </div>
+              </td>
+              <th>할인금액</th>
+              <td>
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+              <th>총잔액</th>
+              <td colspan="5">
+                <input type="text" class="form-control form-control-sm" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table side-table ms-1 mt-3">
+          <tbody>
+            <tr>
+              <td>
+                <div class="border-box">
+                  <h6>과세 구분</h6>
+                  <label for="tax_bill">
+                    <input
+                      type="radio"
+                      id="tax_bill"
+                      name="bill"
+                      class="me-2"
+                    />
+                    세금 계산서
+                  </label>
+                  <label for="origin_bill">
+                    <input
+                      type="radio"
+                      id="origin_bill"
+                      name="bill"
+                      class="me-2"
+                      checked
+                    />
+                    계산서
+                  </label>
+                </div>
+                <label for="tax_bill_out" class="mt-2 mb-3">
+                  <input type="checkbox" id="tax_bill_out" class="me-2" />
+                  세금계산서 발행
+                </label>
+                <div class="border-box">
+                  <h6>결제 구분</h6>
+                  <div class="d-flex align-items-center">
+                    <label for="receipt">
+                      <input
+                        type="radio"
+                        id="receipt"
+                        name="pay_type"
+                        class="me-2"
+                      />
+                      영수 </label
+                    ><label for="claim">
+                      <input
+                        type="radio"
+                        id="claim"
+                        name="pay_type"
+                        class="ms-3 me-2"
+                        checked
+                      />
+                      청구
+                    </label>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="border-box" style="width: 210px">
+                  <h6>결제사항 등록</h6>
+                  <div class="d-flex align-items-center mb-2">
+                    <b>현금</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="d-flex align-items-center mb-2">
+                    <b>할인</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="d-flex align-items-center mb-2">
+                    <b>통장</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <b>카드</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <table class="table table-2 my-1">
+        <tr>
+          <td>
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <span class="btn btn-sm btn-primary me-2">초기화</span
+                ><label for="money_">
+                  <input
+                    type="radio"
+                    id="money_"
+                    name="money"
+                    class="ms-2 me-2"
+                    checked
+                  />
+                  금액 </label
+                ><label for="money_0">
+                  <input
+                    type="radio"
+                    id="money_0"
+                    name="money"
+                    class="ms-3 me-2"
+                  />
+                  0
+                </label>
+              </div>
+              <div class="d-flex align-items-center">
+                <span class="btn btn-sm btn-primary me-2">동시내역</span>
+                <select
+                  name=""
+                  id=""
+                  class="form-select form-select-sm me-2"
+                  style="width: 100px"
+                >
+                  <option value="">1개월</option>
+                </select>
+                <span class="btn btn-sm btn-primary me-4">조회</span>
+                <span class="btn btn-sm btn-primary me-2">거래명세서</span>
+                <span class="btn btn-sm btn-primary me-2">거래영수증</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="d-flex align-items-start">
+        <div class="w-100">
+          <div style="height: 430px; overflow-y: scroll">
+            <table class="table table-3 text-center">
+              <thead>
+                <tr>
+                  <th style="width: 20px">No</th>
+                  <th>제품코드</th>
+                  <th>제품명</th>
+                  <th>중량</th>
+                  <th>수량</th>
+                  <th>단위</th>
+                  <th>단가</th>
+                  <th>총금액</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody id="fish-table-body"></tbody>
+            </table>
+          </div>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>메모</th>
+                <td colspan="2">
+                  <textarea
+                    name=""
+                    id=""
+                    cols="30"
+                    rows="3"
+                    class="form-control"
+                    style="resize: none"
+                  ></textarea>
+                </td>
+                <th>납품금액</th>
+                <td colspan="2">
+                  <div class="d-flex align-items-center">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                    /><input
+                      type="text"
+                      class="form-control form-control-sm ms-1"
+                    />
+                  </div>
+                </td>
+                <td class="ps-4" colspan="3">
+                  <div class="d-flex align-items-center mb-2">
+                    <b style="width: 80px">공급가액</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <b style="width: 80px">부가세액</b>
+                    <input type="text" class="form-control form-control-sm" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>매출액</th>
+                <th>현금매출</th>
+                <th>외상매출</th>
+                <th>현금입금</th>
+                <th>은행입금</th>
+                <th>외상입금</th>
+                <th>카드입금</th>
+                <th>할인금액</th>
+                <th>임금액</th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ms-1" style="width: 430px; overflow-x: scroll">
+          <table class="table table-3 text-center">
+            <thead>
+              <tr>
+                <th>일자</th>
+                <th>판매금</th>
+                <th>입금액</th>
+                <th>현잔액</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-3 text-center">
+            <thead>
+              <tr>
+                <th>제품</th>
+                <th>남은수량</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-3 text-center">
+            <thead>
+              <tr>
+                <th>품명</th>
+                <th>판매수</th>
+                <th>남은수량</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
+<script>
+  for (let i = 0; i < 15; i++) {
+    const tr = `<tr class="fish-table-tr">
+                  <td>${i + 1}</td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-code"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-name"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-weight"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-quantitiy"
+                    />  
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-unit"
+                    />  
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-unit-price"
+                    />  
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-total-price"
+                    />  
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-note"
+                    />  
+                  </td>
+                </tr>`;
+    $("#fish-table-body").append(tr);
+  }
+
+  function loadFishData() {
+    $.ajax({
+      url: "",
+      method: "post",
+      data: form,
+      dataType: "html",
+      success: function (data, status, xhr) {
+        console.log("data > ", data);
+      },
+      error: function (data, status, err) {
+        console.log("err > ", err);
+      },
+    });
+  }
+
+  function save() {
+    const date = $("#date").val();
+    const company = $("#company").val();
+    const number = $("#number").val();
+
+    if (!date) {
+      alert("거래일자를 입력해주세요.");
+      return;
+    }
+
+    if (!company) {
+      alert("거래처를 입력해주세요.");
+      return;
+    }
+
+    if (!number) {
+      alert("순번 입력해주세요.");
+      return;
+    }
+
+    if (confirm(`저장 하시겠습니까?`)) {
+      const fishList = [];
+      $.each($(".fish-table-tr"), function (i, v) {
+        if ($(v).find(".fish-code").val()) {
+          let obj = new Object();
+          obj.fishCode = $(v).find(".fish-code").val();
+          obj.fishName = $(v).find(".fish-name").val();
+          obj.weight = Number($(v).find(".fish-weight").val());
+          obj.quantitiy = Number($(v).find(".fish-quantitiy").val());
+          obj.unit = $(v).find(".fish-unit").val();
+          obj.unitPrice = Number($(v).find(".fish-unit-price").val());
+          obj.totalPrice = Number($(v).find(".fish-total-price").val());
+          obj.note = $(v).find(".fish-note").val();
+          fishList.push(obj);
+        }
+      });
+
+      const sendData = {
+        dealDate: date,
+        clientName: company,
+        cnt: Number(number),
+        dealItems: fishList,
+      };
+
+      console.log("sendData >", sendData);
+
+      $.ajax({
+        url: "",
+        method: "post",
+        data: sendData,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data, status, xhr) {
+          console.log("data > ", data);
+          location.reload();
+        },
+        error: function (data, status, err) {
+          console.log("err > ", err);
+          alert("저장 에러 발생");
+        },
+      });
+    }
+  }
+</script>
