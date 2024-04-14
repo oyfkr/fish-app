@@ -111,6 +111,38 @@
       background-color: #fff !important;
       border: 1px solid #ccc;
     }
+
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: #0002;
+      position: fixed;
+      z-index: 9999;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 5px solid #3498db;
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
   <body>
     <div class="container my-5">
@@ -571,6 +603,10 @@
         </div>
       </div>
     </div>
+
+    <div class="loading-wrap d-none">
+      <div class="loading-spinner"></div>
+    </div>
   </body>
 </html>
 <script>
@@ -641,10 +677,14 @@
     $.ajax({
       url: `http://localhost:8080/deal/now-page-cnt?dealDate=${date}`,
       method: "get",
+      beforeSend: function (res) {
+        $("#loading-wrap").removeClass("d-none");
+      },
       success: function (data, status, xhr) {
         console.log("data > ", data);
         $("#number").val(data + 1);
         currentCnt = data + 1;
+        $("#loading-wrap").addClass("d-none");
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -676,11 +716,14 @@
   function loadFishData() {
     const cnt = $("#number").val();
     const date = $("#date").val();
-    console.log("cnt ", cnt);
+
     $.ajax({
       url: `http://localhost:8080/deal/${cnt}?dealDate=${date}`,
       method: "get",
       async: false,
+      beforeSend: function (res) {
+        $("#loading-wrap").removeClass("d-none");
+      },
       success: function (data, status, xhr) {
         console.log("data > ", data);
         $("#company").val(data.client);
@@ -757,6 +800,8 @@
           $("#modify-btn").addClass("d-none");
           drawTr(0, 15);
         }
+
+        $("#loading-wrap").addClass("d-none");
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -832,6 +877,7 @@
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Content-type", "application/json");
           xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
+          $("#loading-wrap").removeClass("d-none");
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
@@ -912,6 +958,7 @@
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Content-type", "application/json");
           xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
+          $("#loading-wrap").removeClass("d-none");
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
