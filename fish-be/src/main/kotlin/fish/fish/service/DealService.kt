@@ -78,6 +78,7 @@ class DealService(
         return DealDTO.of(deal)
     }
 
+    @Transactional
     fun modifyDeal(id: Long, dealModifyRequest: DealModifyRequest): DealDTO {
 
         val deal = dealRepository.findById(id).orElseThrow { throw Exception("예외처리") }
@@ -89,10 +90,7 @@ class DealService(
 
         // deal_item 수정
 
-
-
-
-
+        modifyDealItem(modifiedDeal, dealModifyRequest)
 
         return DealDTO.of(modifiedDeal)
     }

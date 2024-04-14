@@ -611,6 +611,7 @@
 </html>
 <script>
   var currentCnt = 0;
+  var deal_id = ''
   $(document).ready(function () {
     $("#date").val(getToday());
     drawTr(0, 15);
@@ -726,6 +727,7 @@
       },
       success: function (data, status, xhr) {
         console.log("data > ", data);
+        deal_id = data.id
         $("#company").val(data.client);
         if (data.dealItems.length > 0) {
           $("#save-btn").addClass("d-none");
@@ -932,7 +934,7 @@
         dealDate: date,
         clientName: company,
         cnt: Number(number),
-        dealItemCreateRequests: fishList,
+        dealItemModifyRequests: fishList,
       };
 
       let xhrToken = "";
@@ -951,8 +953,8 @@
       });
 
       $.ajax({
-        url: "http://localhost:8080/deal",
-        method: "post",
+        url: `http://localhost:8080/deal/${deal_id}`,
+        method: "patch",
         data: JSON.stringify(sendData),
         async: false,
         beforeSend: function (xhr) {
