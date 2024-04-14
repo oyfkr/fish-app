@@ -674,20 +674,43 @@
         dealDate: date,
         clientName: company,
         cnt: Number(number),
-        dealItems: fishList,
+        dealItemCreateRequests: fishList,
       };
 
       console.log("sendData >", sendData);
+      //let xhrToken = new XMLHttpRequest();
+      //xhrToken.open("GET", "http://localhost:8080/csrf-token", true);
 
+      let xhrToken = ''
       $.ajax({
-        url: "",
-        method: "post",
-        data: sendData,
-        dataType: "json",
+        url: "http://localhost:8080/csrf-token",
+        method: "get",
+        //dataType: "json",
+        async:false,
         contentType: "application/json; charset=utf-8",
         success: function (data, status, xhr) {
           console.log("data > ", data);
-          location.reload();
+          xhrToken = data
+
+        },
+        error: function (data, status, err) {
+          console.log("err > ", err);
+          alert("토큰 에러 발생");
+        },
+      });
+      console.log("xhrToken > ",xhrToken)
+      $.ajax({
+        url: "http://localhost:8080/deal",
+        method: "post",
+        data: JSON.stringify(sendData),
+        async:false,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Content-type","application/json");
+          xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
+        },
+        success: function (data, status, xhr) {
+          console.log("data > ", data);
+          // location.reload();
         },
         error: function (data, status, err) {
           console.log("err > ", err);
