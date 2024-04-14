@@ -38,7 +38,7 @@ class DealController(
         return ResponseEntity.ok(dealDTO);
     }
 
-    @PatchMapping("/deal/{id}")
+    @PatchMapping("/{id}")
     fun modifyDeal(@PathVariable id : Long, @RequestBody dealModifyRequest: DealModifyRequest) : ResponseEntity<DealDTO> {
 
         val dealDTO : DealDTO = dealService.modifyDeal(id, dealModifyRequest)
