@@ -729,19 +729,19 @@
         console.log("data > ", data);
         deal_id = data.id
         $("#company").val(data.client);
-        if (data.dealItems.length > 0) {
+        if (data.dealItems && data.dealItems.length > 0) {
           $("#save-btn").addClass("d-none");
           $("#modify-btn").removeClass("d-none");
           $("#fish-table-body").html("");
           for (let i = 0; i < data.dealItems.length; i++) {
             const v = data.dealItems[i];
-            const tr = `<tr class="fish-table-tr">
+            const tr = `<tr class="fish-table-tr" id=${v.id}>
                   <td>${i + 1}</td>
                   <td>
                     <input
                       type="text"
                       class="form-control form-control-sm fish-code"
-                      value="${v.fish.name}"
+                      value="${v.fish.code}"
                     />
                   </td>
                   <td>
@@ -918,6 +918,7 @@
       $.each($(".fish-table-tr"), function (i, v) {
         if ($(v).find(".fish-code").val()) {
           let obj = new Object();
+          obj.id = $(v).attr("id");
           obj.fishCode = $(v).find(".fish-code").val();
           obj.fishName = $(v).find(".fish-name").val();
           obj.weight = Number($(v).find(".fish-weight").val());
