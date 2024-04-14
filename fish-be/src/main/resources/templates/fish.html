@@ -566,7 +566,12 @@
 <script>
   $(document).ready(function () {
     $("#date").val(getToday());
-    for (let i = 0; i < 15; i++) {
+    drawTr(0, 15)
+
+    loadCntData();
+  });
+  function drawTr(start, last){
+    for (let i = start; i < last; i++) {
       const tr = `<tr class="fish-table-tr">
                   <td>${i + 1}</td>
                   <td>
@@ -620,13 +625,11 @@
                 </tr>`;
       $("#fish-table-body").append(tr);
     }
-
-    loadCntData();
-  });
-
+  }
   function loadCntData() {
+    const date = $("#date").val();
     $.ajax({
-      url: "http://localhost:8080/deal/now-page-cnt",
+      url: `http://localhost:8080/deal/now-page-cnt?dealDate=${date}`,
       method: "get",
       success: function (data, status, xhr) {
         console.log("data > ", data);
@@ -648,6 +651,72 @@
       method: "get",
       success: function (data, status, xhr) {
         console.log("data > ", data);
+        $("#company").val(data.client);
+        $("#fish-table-body").html('');
+        for (let i = 0; i < data.dealItems.length; i++) {
+          const v = data.dealItems[i]
+          const tr = `<tr class="fish-table-tr">
+                  <td>${i + 1}</td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-code"
+                      value="${v.fish.name}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-name"
+                      value="${v.fish.name}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-weight"
+                      value="${v.weight}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-quantity"
+                      value="${v.quantity}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-unit"
+                      value="${v.unit}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-unit-price"
+                      value="${v.unitPrice}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control form-control-sm fish-total-price"
+                      value="${v.totalPrice}"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm fish-note"
+                      value="${v.note}"
+                    />
+                  </td>
+                </tr>`;
+          $("#fish-table-body").append(tr);
+        }
+        drawTr(data.dealItems.length, 15 - data.dealItems.length)
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -726,6 +795,7 @@
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
+          location.reload()
         },
         error: function (data, status, err) {
           console.log("err > ", err);
