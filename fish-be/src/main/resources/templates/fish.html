@@ -117,7 +117,13 @@
       <div class="d-flex justify-content-between">
         <h2>매출 등록</h2>
         <div class="d-flex align-items-end">
-          <span class="btn btn-sm btn-primary" onclick="save()">저장</span
+          <span class="btn btn-sm btn-primary" onclick="save()" id="save-btn"
+            >저장</span
+          ><span
+            class="btn btn-sm btn-primary d-none"
+            onclick="modify()"
+            id="modify-btn"
+            >수정</span
           ><span class="btn btn-sm btn-primary ms-1">조회</span>
         </div>
       </div>
@@ -174,10 +180,14 @@
                     class="form-control form-control-sm"
                     id="number"
                     value="1"
-                    onchange="loadFishData(this)"
-                  /><span class="btn btn-sm btn-primary ms-1"
+                    onchange="loadFishData()"
+                  /><span
+                    class="btn btn-sm btn-primary ms-1"
+                    onclick="cntControl('down')"
                     ><i class="fa-solid fa-caret-left"></i></span
-                  ><span class="btn btn-sm btn-primary ms-1"
+                  ><span
+                    class="btn btn-sm btn-primary ms-1"
+                    onclick="cntControl('up')"
                     ><i class="fa-solid fa-caret-right"></i
                   ></span>
                 </div>
@@ -564,13 +574,13 @@
   </body>
 </html>
 <script>
+  var currentCnt = 0;
   $(document).ready(function () {
     $("#date").val(getToday());
-    drawTr(0, 15)
-
+    drawTr(0, 15);
     loadCntData();
   });
-  function drawTr(start, last){
+  function drawTr(start, last) {
     for (let i = start; i < last; i++) {
       const tr = `<tr class="fish-table-tr">
                   <td>${i + 1}</td>
@@ -634,6 +644,7 @@
       success: function (data, status, xhr) {
         console.log("data > ", data);
         $("#number").val(data + 1);
+        currentCnt = data + 1;
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -642,20 +653,44 @@
     });
   }
 
-  function loadFishData(e) {
-    const cnt = $(e).val();
-    const date = $("#date").val();
+  function cntControl(type) {
+    let cnt = Number($("#number").val());
+    let result = 0;
+    if (type === "up") {
+      if (cnt >= currentCnt) {
+        result = cnt;
+      } else {
+        result = cnt + 1;
+      }
+    } else {
+      if (cnt <= 1) {
+        result = 1;
+      } else {
+        result = cnt - 1;
+      }
+    }
+    $("#number").val(result);
+    loadFishData();
+  }
 
+  function loadFishData() {
+    const cnt = $("#number").val();
+    const date = $("#date").val();
+    console.log("cnt ", cnt);
     $.ajax({
       url: `http://localhost:8080/deal/${cnt}?dealDate=${date}`,
       method: "get",
+      async: false,
       success: function (data, status, xhr) {
         console.log("data > ", data);
         $("#company").val(data.client);
-        $("#fish-table-body").html('');
-        for (let i = 0; i < data.dealItems.length; i++) {
-          const v = data.dealItems[i]
-          const tr = `<tr class="fish-table-tr">
+        if (data.dealItems.length > 0) {
+          $("#save-btn").addClass("d-none");
+          $("#modify-btn").removeClass("d-none");
+          $("#fish-table-body").html("");
+          for (let i = 0; i < data.dealItems.length; i++) {
+            const v = data.dealItems[i];
+            const tr = `<tr class="fish-table-tr">
                   <td>${i + 1}</td>
                   <td>
                     <input
@@ -714,9 +749,14 @@
                     />
                   </td>
                 </tr>`;
-          $("#fish-table-body").append(tr);
+            $("#fish-table-body").append(tr);
+          }
+          drawTr(data.dealItems.length, 15 - data.dealItems.length);
+        } else {
+          $("#save-btn").removeClass("d-none");
+          $("#modify-btn").addClass("d-none");
+          drawTr(0, 15);
         }
-        drawTr(data.dealItems.length, 15 - data.dealItems.length)
       },
       error: function (data, status, err) {
         console.log("err > ", err);
@@ -795,11 +835,91 @@
         },
         success: function (data, status, xhr) {
           console.log("data > ", data);
-          location.reload()
+          location.reload();
         },
         error: function (data, status, err) {
           console.log("err > ", err);
           alert("저장 에러 발생");
+        },
+      });
+    }
+  }
+
+  function modify() {
+    const date = $("#date").val();
+    const company = $("#company").val();
+    const number = $("#number").val();
+
+    if (!date) {
+      alert("거래일자를 입력해주세요.");
+      return;
+    }
+
+    if (!company) {
+      alert("거래처를 입력해주세요.");
+      return;
+    }
+
+    if (!number) {
+      alert("순번 입력해주세요.");
+      return;
+    }
+
+    if (confirm(`수정 하시겠습니까?`)) {
+      const fishList = [];
+      $.each($(".fish-table-tr"), function (i, v) {
+        if ($(v).find(".fish-code").val()) {
+          let obj = new Object();
+          obj.fishCode = $(v).find(".fish-code").val();
+          obj.fishName = $(v).find(".fish-name").val();
+          obj.weight = Number($(v).find(".fish-weight").val());
+          obj.quantity = Number($(v).find(".fish-quantity").val());
+          obj.unit = $(v).find(".fish-unit").val();
+          obj.unitPrice = Number($(v).find(".fish-unit-price").val());
+          obj.totalPrice = Number($(v).find(".fish-total-price").val());
+          obj.note = $(v).find(".fish-note").val();
+          fishList.push(obj);
+        }
+      });
+
+      const sendData = {
+        dealDate: date,
+        clientName: company,
+        cnt: Number(number),
+        dealItemCreateRequests: fishList,
+      };
+
+      let xhrToken = "";
+      $.ajax({
+        url: "http://localhost:8080/csrf-token",
+        method: "get",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function (data, status, xhr) {
+          xhrToken = data;
+        },
+        error: function (data, status, err) {
+          console.log("err > ", err);
+          alert("수정 토큰 에러 발생");
+        },
+      });
+
+      $.ajax({
+        url: "http://localhost:8080/deal",
+        method: "post",
+        data: JSON.stringify(sendData),
+        async: false,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Content-type", "application/json");
+          xhr.setRequestHeader("X-XSRF-TOKEN", xhrToken);
+        },
+        success: function (data, status, xhr) {
+          console.log("data > ", data);
+          location.reload();
+        },
+        error: function (data, status, err) {
+          console.log("err > ", err);
+          alert("수정 에러 발생");
         },
       });
     }
