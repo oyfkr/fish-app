@@ -50,7 +50,7 @@ class Fish(
 
     @Column(name = "in_out_come_status")
     @Enumerated(EnumType.STRING)
-    var inOutComeStatus : InOutComeStatus?,
+    var inOutComeStatus : InOutComeStatus,
 
     @Column(name = "image")
     var image : String?,
