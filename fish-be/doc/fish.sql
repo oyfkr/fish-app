@@ -39,8 +39,26 @@ CONSTRAINT fk_deal FOREIGN KEY (deal_id) REFERENCES deal(id)
 );
 
 -- fish 생성 쿼리
-CREATE TABLE IF NOT EXISTS fish (
+CREATE TABLE fish (
 id SERIAL PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
-code VARCHAR(255) NOT NULL
+purchase_price INTEGER,
+sale_price INTEGER,
+major VARCHAR(255),
+middle VARCHAR(255),
+small VARCHAR(255),
+weight INTEGER,
+proper_inventory INTEGER,
+register_date DATE,
+vat INTEGER,
+in_out_come_status VARCHAR(255),
+image VARCHAR(255),
+note TEXT,
+a_price INTEGER,
+b_price INTEGER,
+c_price INTEGER,
+d_price INTEGER,
+e_price INTEGER,
+created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_date TIMESTAMP
 );
