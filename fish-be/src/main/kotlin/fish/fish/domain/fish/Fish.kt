@@ -1,6 +1,7 @@
 package fish.fish.domain.fish
 
 import fish.fish.controller.fish.request.FishCreateRequest
+import fish.fish.domain.account.Account
 import fish.fish.domain.fish.enums.InOutComeStatus
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
@@ -74,6 +75,10 @@ class Fish(
     @Column(name = "e_price")
     var ePrice : Int?,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    var account: Account,
+
     @CreatedDate
     @Column(name = "created_date")
     var createdDate: LocalDateTime,
@@ -84,9 +89,9 @@ class Fish(
 ) {
 
     companion object {
-        fun ofByCreateRequest(fishCreateRequest: FishCreateRequest) : Fish {
+        fun ofByCreateRequest(fishCreateRequest: FishCreateRequest, account: Account) : Fish {
             return Fish(null, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
-                fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, LocalDateTime.now(), null)
+                fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, account, LocalDateTime.now(), null)
         }
     }
 }

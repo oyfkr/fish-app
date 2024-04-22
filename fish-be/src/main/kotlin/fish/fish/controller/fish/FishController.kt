@@ -4,6 +4,7 @@ import fish.fish.controller.fish.request.FishCreateRequest
 import fish.fish.domain.fish.dto.FishDTO
 import fish.fish.service.FishService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,6 +19,8 @@ class FishController(
     @PostMapping()
     fun createFish(@RequestBody fishCreateRequest: FishCreateRequest) : ResponseEntity<FishDTO> {
 
-        return ResponseEntity.ok(fishService.createFish(fishCreateRequest))
+        val name = SecurityContextHolder.getContext().authentication.name;
+
+        return ResponseEntity.ok(fishService.createFish(fishCreateRequest, name))
     }
 }
