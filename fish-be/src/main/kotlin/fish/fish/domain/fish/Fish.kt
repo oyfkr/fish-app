@@ -1,5 +1,6 @@
 package fish.fish.domain.fish
 
+import fish.fish.controller.fish.request.FishCreateRequest
 import fish.fish.domain.fish.enums.InOutComeStatus
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
@@ -81,4 +82,11 @@ class Fish(
     @Column(name = "modified_date")
     var modifiedDate: LocalDateTime?
 ) {
+
+    companion object {
+        fun ofByCreateRequest(fishCreateRequest: FishCreateRequest) : Fish {
+            return Fish(null, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
+                fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, LocalDateTime.now(), null)
+        }
+    }
 }
