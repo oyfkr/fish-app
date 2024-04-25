@@ -36,11 +36,6 @@ class LoginController {
         return "index"
     }
 
-    @GetMapping("/fish")
-    fun fish() : String{
-        return "fish"
-    }
-
     @GetMapping("/csrf-token")
     fun getCsrfToken(request: HttpServletRequest): ResponseEntity<String> {
         val csrfToken: CsrfToken =

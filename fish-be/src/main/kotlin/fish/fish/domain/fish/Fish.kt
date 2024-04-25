@@ -1,6 +1,7 @@
 package fish.fish.domain.fish
 
 import fish.fish.controller.fish.request.FishCreateRequest
+import fish.fish.controller.fish.request.FishModifyRequest
 import fish.fish.domain.account.Account
 import fish.fish.domain.fish.enums.InOutComeStatus
 import jakarta.persistence.*
@@ -13,10 +14,13 @@ import java.time.LocalDateTime
 @Table
 class Fish(
 
-    // 프로그램에서 코드로 사용
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long?,
+
+    // 프로그램에서 코드로 사용 , account별 cnt가 초기화 필요
+    @Column(name = "cnt")
+    var cnt : Int,
 
     @Column(name = "name")
     var name : String,
@@ -79,6 +83,9 @@ class Fish(
     @JoinColumn(name = "account_id")
     var account: Account,
 
+    @Column(name = "enabled")
+    var enabled: Boolean,
+
     @CreatedDate
     @Column(name = "created_date")
     var createdDate: LocalDateTime,
@@ -90,8 +97,37 @@ class Fish(
 
     companion object {
         fun ofByCreateRequest(fishCreateRequest: FishCreateRequest, account: Account) : Fish {
-            return Fish(null, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
-                fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, account, LocalDateTime.now(), null)
+            return Fish(null, fishCreateRequest.cnt, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
+                fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, account, true, LocalDateTime.now(), null)
         }
+    }
+
+    fun modifyFish(fishModifyRequest: FishModifyRequest) : Fish {
+
+        this.name = fishModifyRequest.name
+        this.cnt = fishModifyRequest.cnt
+        this.purchasePrice = fishModifyRequest.purchasePrice
+        this.salePrice = fishModifyRequest.salePrice
+        this.major = fishModifyRequest.major
+        this.middle = fishModifyRequest.middle
+        this.small = fishModifyRequest.small
+        this.weight = fishModifyRequest.weight
+        this.properInventory = fishModifyRequest.properInventory
+        this.registerDate = fishModifyRequest.registerDate
+        this.vat = fishModifyRequest.vat
+        this.inOutComeStatus = fishModifyRequest.inOutComeStatus
+        this.image = fishModifyRequest.image
+        this.note = fishModifyRequest.note
+        this.aPrice = fishModifyRequest.aPrice
+        this.bPrice = fishModifyRequest.bPrice
+        this.cPrice = fishModifyRequest.cPrice
+        this.dPrice = fishModifyRequest.dPrice
+        this.ePrice = fishModifyRequest.ePrice
+
+        return this
+    }
+
+    fun isDisabled() {
+        this.enabled = false
     }
 }

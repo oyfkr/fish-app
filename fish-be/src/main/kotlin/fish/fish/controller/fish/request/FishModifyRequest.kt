@@ -3,7 +3,7 @@ package fish.fish.controller.fish.request
 import fish.fish.domain.fish.enums.InOutComeStatus
 import java.time.LocalDate
 
-class FishCreateRequest(
+class FishModifyRequest(
 
     val name : String,
 
