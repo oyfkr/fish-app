@@ -66,4 +66,11 @@ class FishService(
 
         fish.isDisabled()
     }
+
+    fun getFishNowCnt(accountName: String): Int {
+
+        var fish = fishRepository.findByAccountLast(accountName) ?: throw BaseException(ErrorType.FISH_NOT_FOUNT)
+
+        return fish.cnt + 1
+    }
 }

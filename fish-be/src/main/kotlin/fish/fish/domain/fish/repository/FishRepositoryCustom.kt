@@ -11,4 +11,5 @@ interface FishRepositoryCustom {
 
     fun findAllByAccount(account: Account) : List<Fish>
     fun findByIdWithAccount(id: Long): Fish?
+    fun findByAccountLast(accountName: String): Fish?
 }

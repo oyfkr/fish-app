@@ -37,4 +37,11 @@ class FishRepositoryCustomImpl(
             .join(fish.account, account).fetchJoin()
             .fetchOne()
     }
+
+    override fun findByAccountLast(accountName: String): Fish? {
+        return queryFactory.selectFrom(fish)
+            .where(fish.account.username.eq(accountName))
+            .orderBy(fish.id.desc())
+            .fetchFirst()
+    }
 }
