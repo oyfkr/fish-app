@@ -32,9 +32,9 @@ class FishController(
     // 단품 조회
     @GetMapping("/{cnt}")
     fun getFish(@PathVariable cnt : Int) : ResponseEntity<FishDTO> {
-        val name = SecurityContextHolder.getContext().authentication.name;
+        val accountName = SecurityContextHolder.getContext().authentication.name;
 
-        return ResponseEntity.ok(fishService.getFish(cnt, name));
+        return ResponseEntity.ok(fishService.getFish(cnt, accountName));
     }
 
     // 여러개 조회

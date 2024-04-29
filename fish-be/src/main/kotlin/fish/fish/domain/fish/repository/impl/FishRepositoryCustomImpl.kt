@@ -27,7 +27,7 @@ class FishRepositoryCustomImpl(
 
     override fun findAllByAccount(account: Account): List<Fish> {
         return queryFactory.selectFrom(fish)
-            .where(fish.enabled.eq(true), fish.account.eq(account))
+            .where(fish.enabled.eq(true), fish.account.eq(account), fish.enabled.eq(true))
             .fetch()
     }
 
