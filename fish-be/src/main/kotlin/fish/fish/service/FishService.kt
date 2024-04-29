@@ -30,11 +30,11 @@ class FishService(
     }
 
     @Transactional(readOnly = true)
-    fun getFish(cnt: Int, accountName: String): FishDTO? {
+    fun getFish(code: Int, accountName: String): FishDTO? {
 
         val account = accountRepository.findByUsername(accountName) ?: throw BaseException(ErrorType.ACCOUNT_NOT_FOUND)
 
-        val fish = fishRepository.findByCntAndAccount(cnt, account) ?:throw BaseException(ErrorType.FISH_NOT_FOUNT)
+        val fish = fishRepository.findByCntAndAccount(code, account) ?:throw BaseException(ErrorType.FISH_NOT_FOUNT)
 
         return FishDTO.of(fish)
     }
@@ -67,10 +67,10 @@ class FishService(
         fish.isDisabled()
     }
 
-    fun getFishNowCnt(accountName: String): Int {
+    fun getFishLatestCode(accountName: String): Int {
 
         var fish = fishRepository.findByAccountLast(accountName) ?: throw BaseException(ErrorType.FISH_NOT_FOUNT)
 
-        return fish.cnt + 1
+        return fish.code + 1
     }
 }

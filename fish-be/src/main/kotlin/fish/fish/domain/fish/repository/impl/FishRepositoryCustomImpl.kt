@@ -19,9 +19,9 @@ class FishRepositoryCustomImpl(
             .fetchOne()
     }
 
-    override fun findByCntAndAccount(cnt: Int, account: Account): Fish? {
+    override fun findByCntAndAccount(code: Int, account: Account): Fish? {
         return queryFactory.selectFrom(fish)
-            .where(fish.cnt.eq(cnt), fish.account.eq(account))
+            .where(fish.cnt.eq(code), fish.account.eq(account))
             .fetchOne()
     }
 

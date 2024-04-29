@@ -7,7 +7,6 @@ import fish.fish.service.FishService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
 
 @RestController
 @RequestMapping("/fish")
@@ -24,11 +23,11 @@ class FishController(
     }
 
     // 단품 조회
-    @GetMapping("/{cnt}")
-    fun getFish(@PathVariable cnt : Int) : ResponseEntity<FishDTO> {
+    @GetMapping("/{code}")
+    fun getFish(@PathVariable code : Int) : ResponseEntity<FishDTO> {
         val accountName = SecurityContextHolder.getContext().authentication.name;
 
-        return ResponseEntity.ok(fishService.getFish(cnt, accountName));
+        return ResponseEntity.ok(fishService.getFish(code, accountName));
     }
 
     // 여러개 조회
@@ -54,11 +53,11 @@ class FishController(
         return ResponseEntity.ok().build()
     }
 
-    @GetMapping("/now-cnt")
-    fun getFishNowCnt() : ResponseEntity<Int>{
+    @GetMapping("/now-code")
+    fun getFishLatestCode() : ResponseEntity<Int>{
 
         val accountName = SecurityContextHolder.getContext().authentication.name;
 
-        return ResponseEntity.ok(fishService.getFishNowCnt(accountName));
+        return ResponseEntity.ok(fishService.getFishLatestCode(accountName));
     }
 }
