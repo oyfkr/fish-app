@@ -127,7 +127,7 @@ class Fish(
         return this
     }
 
-    fun isDisabled() {
+    fun changeToDisabled() {
         this.enabled = false
     }
 }

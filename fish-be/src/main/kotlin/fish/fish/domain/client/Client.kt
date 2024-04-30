@@ -1,7 +1,14 @@
 package fish.fish.domain.client
 
+import fish.fish.controller.client.request.ClientAgentModifyRequest
+import fish.fish.controller.client.request.ClientCreateRequest
+import fish.fish.controller.client.request.ClientModifyRequest
+import fish.fish.domain.account.Account
 import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.reflect.jvm.internal.impl.load.java.structure.JavaClassifier
 
 @Table(name = "client")
@@ -30,7 +37,7 @@ class Client(
     var phoneNumber : String?, // 전화번호
 
     @Column(name = "fax_number")
-    var faxNumber: Number?, // 팩스번호
+    var faxNumber: String?, // 팩스번호
 
     @Column(name = "cell_phone_number")
     var cellPhoneNumber: String?, // 휴대폰
@@ -92,7 +99,71 @@ class Client(
     @Column(name = "is_trading_suspended_exception")
     var isTradingSuspendedException: Boolean?, // 거래 중지 예외
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
-    var clientAgent: MutableList<ClientAgent>?
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "client_agent_id")
+    var clientAgent: ClientAgent?,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    var account: Account,
+
+    @CreatedDate
+    @Column(name = "created_date")
+    var createdDate: LocalDateTime,
+
+    @LastModifiedDate
+    @Column(name = "modified_date")
+    var modifiedDate: LocalDateTime?
 ) {
+
+    companion object{
+        fun of(clientCreateRequest: ClientCreateRequest, account: Account) : Client {
+
+            return Client(null, clientCreateRequest.processingClassification, clientCreateRequest.code, clientCreateRequest.name,clientCreateRequest.taxInvoiceName, clientCreateRequest.representationName, clientCreateRequest.phoneNumber, clientCreateRequest.faxNumber, clientCreateRequest.cellPhoneNumber, clientCreateRequest.transactionStartDate, clientCreateRequest.lastTransactionDate, clientCreateRequest.unitPriceApplication, clientCreateRequest.transactionPrintOption, clientCreateRequest.businessStyle, clientCreateRequest.event, clientCreateRequest.businessRegistrationNumber, clientCreateRequest.sortation, clientCreateRequest.bankName, clientCreateRequest.bankAccountNumber, clientCreateRequest.bankAccountName, clientCreateRequest.note, clientCreateRequest.smallAddress, clientCreateRequest.address, clientCreateRequest.postalCode, clientCreateRequest.streetNumber, true, clientCreateRequest.isTradingSuspended, clientCreateRequest.isTradingSuspendedException, null, account, LocalDateTime.now(), null)
+        }
+    }
+
+    fun addClientAgents(clientAgent: ClientAgent) {
+       this.clientAgent = clientAgent
+    }
+
+    fun modifyClientByModifyRequest(clientModifyRequest: ClientModifyRequest) : Client{
+        this.processingClassification = clientModifyRequest.processingClassification
+        this.name = clientModifyRequest.name
+        this.taxInvoiceName = clientModifyRequest.taxInvoiceName
+        this.representationName = clientModifyRequest.representationName
+        this.phoneNumber = clientModifyRequest.phoneNumber
+        this.faxNumber = clientModifyRequest.faxNumber
+        this.cellPhoneNumber = clientModifyRequest.cellPhoneNumber
+        this.transactionStartDate = clientModifyRequest.transactionStartDate
+        this.lastTransactionDate = clientModifyRequest.lastTransactionDate
+        this.unitPriceApplication = clientModifyRequest.unitPriceApplication
+        this.transactionPrintOption = clientModifyRequest.transactionPrintOption
+        this.businessStyle = clientModifyRequest.businessStyle
+        this.event = clientModifyRequest.event
+        this.businessRegistrationNumber = clientModifyRequest.businessRegistrationNumber
+        this.sortation = clientModifyRequest.sortation
+        this.bankName = clientModifyRequest.bankName
+        this.bankAccountNumber = clientModifyRequest.bankAccountNumber
+        this.bankAccountName = clientModifyRequest.bankAccountName
+        this.note = clientModifyRequest.note
+        this.smallAddress = clientModifyRequest.smallAddress
+        this.address = clientModifyRequest.address
+        this.postalCode = clientModifyRequest.postalCode
+        this.streetNumber = clientModifyRequest.streetNumber
+        this.isTradingSuspended = clientModifyRequest.isTradingSuspended
+        this.isTradingSuspendedException = clientModifyRequest.isTradingSuspendedException
+
+        return this
+    }
+
+    fun changeToDisabled() {
+        this.enabled = false
+    }
+
+    fun modifyClientAgent(clientAgentModifyRequest: ClientAgentModifyRequest) {
+        if(this.clientAgent != null) {
+            this.clientAgent!!.modifyByRequest(clientAgentModifyRequest)
+        }
+    }
 }

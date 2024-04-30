@@ -13,5 +13,6 @@ enum class ErrorType(
 
     FISH_NOT_FOUNT(HttpStatus.NOT_FOUND, "물고기를 찾을 수 없습니다."),
 
-    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다.")
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+    CLIENT_NOT_FOUND(HttpStatus.NOT_FOUND, "거래처를 찾을 수 없습니다.")
 }

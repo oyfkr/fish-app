@@ -64,7 +64,7 @@ class FishService(
 
         var fish = fishRepository.findByIdWithAccount(id) ?: throw BaseException(ErrorType.FISH_NOT_FOUNT)
 
-        fish.isDisabled()
+        fish.changeToDisabled()
     }
 
     fun getFishLatestCode(accountName: String): Int {
