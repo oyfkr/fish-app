@@ -1,7 +1,15 @@
 <template>
   <router-view></router-view>
 </template>
-<script setup></script>
+<script>
+export default {
+  created() {
+    const vm = this;
+    const loginInfo = window.sessionStorage.getItem("fish-login");
+    if (!loginInfo) vm.$router.push("/");
+  },
+};
+</script>
 <style>
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 * {
