@@ -31,4 +31,11 @@ class ClientRepositoryCustomImpl(
             .leftJoin(client.clientAgent, clientAgent).fetchJoin()
             .fetchOne()
     }
+
+    override fun findByAccountNameLastOne(accountName: String): Client? {
+//        return queryFactory.selectFrom(client)
+//                .where(client.)
+
+        return null
+    }
 }

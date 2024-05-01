@@ -79,4 +79,11 @@ class ClientService(
 
         client.changeToDisabled()
     }
+
+    fun getClientLatestCode(accountName: String): Int {
+
+        val code = clientRepository.findByAccountNameLastOne(accountName)?.code ?: 1
+
+        return code+1
+    }
 }
