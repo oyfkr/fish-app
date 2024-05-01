@@ -9,11 +9,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer
+import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import kotlin.math.log
 
 
@@ -32,14 +36,19 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity) : SecurityFilterChain {
         http
+                .cors{
+                    it.configurationSource(corsConfigurationSource())
+                }
             .headers{
                 headers -> headers.frameOptions { it.sameOrigin() }
             }
             .csrf {
+//                it.disable()
                     it.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 it.ignoringRequestMatchers(AntPathRequestMatcher("/h2-console/**"))
             }
-            .formLogin { login -> login.loginPage("/login-page")
+            .formLogin { login ->
+//                login.loginPage("/login-page")
                 login.usernameParameter("username")
                 login.passwordParameter("password")
                 login.loginProcessingUrl("/login")
@@ -54,6 +63,7 @@ class SecurityConfig(
 //                request.requestMatchers("/**").permitAll()
                 request.requestMatchers("/login-page").permitAll()
                 request.requestMatchers("/login").permitAll()
+                request.requestMatchers("/csrf-token").permitAll()
                 request.requestMatchers("/login-fail").permitAll()
                 request.requestMatchers("/accounts").permitAll()
                 request.requestMatchers("/login.css").permitAll()
@@ -66,6 +76,17 @@ class SecurityConfig(
             }
 
         return http.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("http://localhost:5173")
+        configuration.allowedMethods = listOf("POST", "GET", "DELETE", "PUT")
+        configuration.allowedHeaders = listOf("*")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 
 //    @Bean

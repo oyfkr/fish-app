@@ -552,22 +552,22 @@ export default {
   methods: {
     async loadCntData() {
       const vm = this;
-      // await axios
-      //   .get(`http://localhost:8080/deal/now-page-cnt?dealDate=${vm.date}`)
-      //   .then((res) => {
-      //     console.log(res);
-      //     vm.number = res + 1;
-      //     vm.currentCnt = data + 1;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     alert("순서 조회 에러 발생");
-      //   });
+      await axios
+        .get(`http://localhost:8080/deal/now-page-cnt?dealDate=${vm.date}`)
+        .then((res) => {
+          console.log(res);
+          vm.number = res + 1;
+          vm.currentCnt = data + 1;
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("순서 조회 에러 발생");
+        });
 
       vm.number = 0 + 1;
       vm.currentCnt = 0 + 1;
 
-      await vm.loadFishData();
+      //await vm.loadFishData();
     },
     async loadFishData() {
       const vm = this;

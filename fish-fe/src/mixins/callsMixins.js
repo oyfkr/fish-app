@@ -1,3 +1,4 @@
+import axios from "axios";
 export default {
   methods: {
     async getToken() {
@@ -6,7 +7,7 @@ export default {
         .get(`http://localhost:8080/csrf-token`)
         .then((res) => {
           console.log(res);
-          xhrToken = res;
+          xhrToken = res.data;
         })
         .catch((err) => {
           console.log(err);

@@ -22,6 +22,7 @@
   <Loading v-if="isLoading" />
 </template>
 <script>
+import axios from "axios";
 import Loading from "@/components/Loading.vue";
 import callsMixins from "@/mixins/callsMixins";
 
@@ -54,16 +55,17 @@ export default {
       await axios
         .post(
           `http://localhost:8080/login`,
-          { data: JSON.stringify(sendData) },
+            {username:vm.id, password:vm.password},
           {
             headers: {
-              "Content-type": "application/json",
+              "Content-type": "multipart/form-data",
               "X-XSRF-TOKEN": vm.xhrToken,
             },
           }
         )
         .then((res) => {
           console.log(res);
+          console.log("header ", res.headers["Set-Cookie"])
           window.sessionStorage.setItem("fish-login", JSON.stringify(res));
           vm.$router.push("/link-menu");
         })

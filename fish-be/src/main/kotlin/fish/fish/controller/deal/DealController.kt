@@ -11,6 +11,7 @@ import java.time.LocalDate
 
 @RestController
 @RequestMapping("/deal")
+@CrossOrigin(origins = ["http://localhost:5173"])
 class DealController(
     val dealService: DealService
 ) {
