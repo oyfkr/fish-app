@@ -52,8 +52,7 @@
                 <input
                   type="text"
                   class="form-control form-control-sm"
-                  v-model="componey"
-                  id="company"
+                  v-model="company"
                 /><input
                   type="text"
                   class="form-control form-control-sm ms-1"
@@ -66,15 +65,14 @@
                 <input
                   type="number"
                   class="form-control form-control-sm"
-                  id="number"
                   v-model="number"
                 /><span
                   class="btn btn-sm btn-primary ms-1"
-                  onclick="cntControl('down')"
+                  @click="cntControl('down')"
                   ><i class="fa-solid fa-caret-left"></i></span
                 ><span
                   class="btn btn-sm btn-primary ms-1"
-                  onclick="cntControl('up')"
+                  @click="cntControl('up')"
                   ><i class="fa-solid fa-caret-right"></i
                 ></span>
               </div>
@@ -511,19 +509,20 @@
 </template>
 <script>
 import Loading from "@/components/Loading.vue";
-import commonMixinxs from "@/mixins/commonMixins";
+import commonMixins from "@/mixins/commonMixins";
+import callsMixins from "@/mixins/callsMixins";
 
 import axios from "axios";
 export default {
   components: { Loading },
-  mixins: [commonMixinxs],
+  mixins: [commonMixins, callsMixins],
   data() {
     return {
       isLoading: false,
       xhrToken: "",
       currentCnt: 0,
       deal_id: "",
-      componey: "",
+      company: "",
       number: 1,
       date: this.getToday(),
       fishList: [
@@ -543,48 +542,18 @@ export default {
   },
   created() {
     const vm = this;
-    //vm.loadCntData()
-    vm.drawFishList(0, 15);
+    vm.loadCntData();
   },
   watch: {
     number() {
-      //this.loadFishData();
-      console.log("@@@@");
+      this.loadFishData();
     },
   },
   methods: {
-    async getToken() {
+    async loadCntData() {
       const vm = this;
-      await axios
-        .get(`http://localhost:8080/csrf-token`)
-        .then((res) => {
-          console.log(res);
-          vm.xhrToken = res;
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("토큰 에러 발생");
-        });
-    },
-    loadCntData() {
-      const vm = this;
-      axios
-        .get(`http://localhost:8080/deal/now-page-cnt?dealDate=${vm.date}`)
-        .then((res) => {
-          console.log(res);
-          vm.number = res + 1;
-          vm.currentCnt = data + 1;
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("순서 조회 에러 발생");
-        });
-    },
-    loadFishData() {
-      const vm = this;
-      vm.isLoading = true;
-      // axios
-      //   .get(`http://localhost:8080/deal/${vm.number}?dealDate=${vm.date}`)
+      // await axios
+      //   .get(`http://localhost:8080/deal/now-page-cnt?dealDate=${vm.date}`)
       //   .then((res) => {
       //     console.log(res);
       //     vm.number = res + 1;
@@ -595,7 +564,65 @@ export default {
       //     alert("순서 조회 에러 발생");
       //   });
 
-      deal_id = data.id;
+      vm.number = 0 + 1;
+      vm.currentCnt = 0 + 1;
+
+      await vm.loadFishData();
+    },
+    async loadFishData() {
+      const vm = this;
+      vm.isLoading = true;
+      // await axios
+      //   .get(`http://localhost:8080/deal/${vm.number}?dealDate=${vm.date}`)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     alert("물고기 조회 에러 발생");
+      //   });
+
+      let data;
+      if (vm.number === 1) {
+        data = {
+          id: 12314,
+          client: "회사11",
+          dealItems: [
+            {
+              fish: {
+                code: 3134,
+                name: "asdf",
+              },
+              weight: 30,
+              quantity: 5,
+              unit: "test",
+              unitPrice: 1000,
+              totalPrice: 10000,
+              note: "test note",
+            },
+            {
+              fish: {
+                code: 33134,
+                name: "asdf222",
+              },
+              weight: 30,
+              quantity: 5,
+              unit: "test",
+              unitPrice: 1000,
+              totalPrice: 10000,
+              note: "test note",
+            },
+          ],
+        };
+      } else {
+        data = {
+          id: 12314,
+          client: "회사22",
+          dealItems: [],
+        };
+      }
+
+      vm.deal_id = data.id;
       vm.company = data.client;
 
       if (data && data.dealItems.length > 0) {
@@ -617,9 +644,11 @@ export default {
           arr.push(obj);
         }
         vm.fishList = arr;
-        vm.drawFishList(data.dealItems.length, 15 - data.dealItems.length);
+        const dILen = data.dealItems.length;
+        vm.drawFishList(dILen, 15);
       } else {
         vm.isSaveBtnShow = true;
+        vm.fishList = [];
         vm.drawFishList(0, 15);
       }
 
@@ -678,13 +707,24 @@ export default {
         .catch((err) => {
           console.log(err);
           alert("저장 에러 발생");
+          vm.isLoading = false;
         });
     },
     save() {
-      this.sendData("svae");
+      this.sendData("save");
     },
     modify() {
       this.sendData("modify");
+    },
+    cntControl(type) {
+      const vm = this;
+      if (type === "up") {
+        vm.number++;
+      } else if (type === "down") {
+        if (vm.number > 1) {
+          vm.number--;
+        }
+      }
     },
     drawFishList(start, end) {
       const vm = this;

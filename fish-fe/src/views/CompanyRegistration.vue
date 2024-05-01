@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between">
       <h2>거래처 등록</h2>
       <div class="d-flex align-items-end">
-        <span class="btn btn-sm btn-primary" onclick="save()" id="save-btn"
+        <span class="btn btn-sm btn-primary" @click="save" id="save-btn"
           >저장</span
         ><span class="btn btn-sm btn-primary d-none" id="modify-btn">수정</span
         ><span class="btn btn-sm btn-primary ms-1">조회</span>
@@ -16,7 +16,12 @@
           <tr>
             <th>처리구분</th>
             <td>
-              <select name="" id="" class="form-select form-select-sm">
+              <select
+                name=""
+                id=""
+                class="form-select form-select-sm"
+                v-model="processingClassification"
+              >
                 <option value="">선택</option>
               </select>
             </td>
@@ -24,61 +29,102 @@
           <tr>
             <th>거래처코드</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.code"
+              />
             </td>
           </tr>
           <tr>
             <th>거래처명</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.name"
+              />
             </td>
           </tr>
           <tr>
             <th>세금계산서명</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.taxInvoiceName"
+              />
             </td>
           </tr>
           <tr>
             <th>대표자성명</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.representationName"
+              />
             </td>
           </tr>
           <tr>
             <th>전화번호</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.phoneNumber"
+              />
             </td>
           </tr>
           <tr>
             <th>팩스번호</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.faxNumber"
+              />
             </td>
           </tr>
           <tr>
             <th>휴대폰</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.cellPhoneNumber"
+              />
             </td>
           </tr>
           <tr>
             <th>거래시작일</th>
             <td>
-              <input type="date" class="form-control form-control-sm" />
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                v-model="clientInfo.transactionStartDate"
+              />
             </td>
           </tr>
           <tr>
             <th>최종거래일자</th>
             <td>
-              <input type="text" class="form-control form-control-sm" />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                v-model="clientInfo.lastTransactionDate"
+              />
             </td>
           </tr>
           <tr>
             <th>단가적용</th>
             <td>
-              <select name="" id="" class="form-select form-select-sm">
+              <select
+                name=""
+                id=""
+                class="form-select form-select-sm"
+                v-model="clientInfo.unitPriceApplication"
+              >
                 <option value="">선택</option>
               </select>
             </td>
@@ -94,6 +140,7 @@
                       id="print"
                       name="credit_print"
                       class="me-2"
+                      v-model="clientInfo.transactionPrintOption"
                     />
                     하단 출력 </label
                   ><label for="print_no">
@@ -102,6 +149,7 @@
                       id="print_no"
                       name="credit_print"
                       class="ms-3 me-2"
+                      v-model="clientInfo.transactionPrintOption"
                     />
                     하단 미출력
                   </label>
@@ -118,25 +166,42 @@
               <tr>
                 <th>업태</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.businessStyle"
+                  />
                 </td>
               </tr>
               <tr>
                 <th>종목</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.event"
+                  />
                 </td>
               </tr>
               <tr>
                 <th>사업자등록번호</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.businessRegistrationNumber"
+                  />
                 </td>
               </tr>
               <tr>
                 <th>구분</th>
                 <td>
-                  <select name="" id="" class="form-select form-select-sm">
+                  <select
+                    name=""
+                    id=""
+                    class="form-select form-select-sm"
+                    v-model="clientInfo.sortation"
+                  >
                     <option value="">선택</option>
                   </select>
                 </td>
@@ -144,13 +209,21 @@
               <tr>
                 <th>거래은행</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.bankName"
+                  />
                 </td>
               </tr>
               <tr>
                 <th>예금주명</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.bankAccountName"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -162,51 +235,92 @@
                 <tr>
                   <th>성명</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.name"
+                    />
                   </td>
                   <th>담당자2</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.agent2Name"
+                    />
                   </td>
                 </tr>
                 <tr>
                   <th>직책</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.position"
+                    />
                   </td>
                   <th>휴대폰2</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.agent2CellPhoneNumber"
+                    />
                   </td>
                 </tr>
                 <tr>
                   <th>내선번호</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.extension"
+                    />
                   </td>
                   <th>연락처2</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.agent2PhoneNumber"
+                    />
                   </td>
                 </tr>
                 <tr>
                   <th>이메일</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.email"
+                    />
                   </td>
                   <th>이메일2</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.agent2Email"
+                    />
                   </td>
                 </tr>
                 <tr>
                   <th>자택전화</th>
                   <td>
-                    <input type="text" class="form-control form-control-sm" />
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="clientInfo.clientAgent.phoneNumber"
+                    />
                   </td>
                   <th>색상</th>
                   <td>
-                    <select name="" id="" class="form-select form-select-sm">
+                    <select
+                      name=""
+                      id=""
+                      class="form-select form-select-sm"
+                      v-model="clientInfo.clientAgent.name"
+                    >
                       <option value="">선택</option>
                     </select>
                   </td>
@@ -222,10 +336,22 @@
           </div>
           <div>
             <label for="type4_1">
-              <input type="checkbox" id="type4_1" name="type4" class="me-2" />
+              <input
+                type="checkbox"
+                id="type4_1"
+                name="type4"
+                class="me-2"
+                v-model="clientInfo.isTradingSuspended"
+              />
               거래중지 </label
             ><label for="type4_2">
-              <input type="checkbox" id="type4_2" name="type4" class="me-2" />
+              <input
+                type="checkbox"
+                id="type4_2"
+                name="type4"
+                class="me-2"
+                v-model="clientInfo.isTradingSuspended"
+              />
               예외
             </label>
           </div>
@@ -237,21 +363,37 @@
               <tr>
                 <th>읍/면/동</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.smallAddress"
+                  />
                 </td>
                 <th>주소</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.address"
+                  />
                 </td>
               </tr>
               <tr>
                 <th>우편번호</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.postalCode"
+                  />
                 </td>
                 <th>주소번지</th>
                 <td>
-                  <input type="text" class="form-control form-control-sm" />
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    v-model="clientInfo.streetNumber"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -294,6 +436,7 @@
                   id="trade0"
                   name="trade"
                   class="ms-2 me-2"
+                  v-model="isTradingSuspended"
                   checked
                 />
                 거래중 </label
@@ -303,6 +446,7 @@
                   id="trade1"
                   name="trade"
                   class="ms-3 me-2"
+                  v-model="isTradingSuspended"
                 />
                 거래중지
               </label>
@@ -369,13 +513,80 @@
       </div>
     </div>
   </div>
+
+  <Loading v-if="isLoading" />
 </template>
 <script>
+import Loading from "@/components/Loading.vue";
+import commonMixins from "@/mixins/commonMixins";
+
 export default {
+  components: { Loading },
+  mixins: [commonMixins],
   data() {
     return {
-      text: "test",
+      isLoading: false,
+      clientInfo: {
+        processingClassification: "String", // 처리구분
+        code: "Int", // 거래처 코드
+        name: "String", // 거래처명
+        taxInvoiceName: "String", // 세금계산서명
+        representationName: "String", // 대표자 성명
+        phoneNumber: "String", // 전화번호
+        faxNumber: "String", // 팩스번호
+        cellPhoneNumber: "String", // 휴대폰
+        transactionStartDate: "LocalDate", // 거래시작일
+        lastTransactionDate: "LocalDate", // 최종거래일자
+        unitPriceApplication: "String", // 단가적용
+        transactionPrintOption: "String", // 거래 영수증 출력 설정
+        businessStyle: "String", // 업태
+        event: "String", // 종목
+        businessRegistrationNumber: "String", // 사업자등록번호
+        sortation: "String", // 구분
+        bankName: "String", // 은행명
+        bankAccountNumber: "String", // 계좌번호
+        bankAccountName: "String", // 예금주명
+        note: "String", // 비고
+        smallAddress: "String", // 읍,면,동
+        address: "String", // 주소
+        postalCode: "String", // 우편번호
+        streetNumber: "String", // 주소번지
+        isTradingSuspended: "Boolean", // 거래 중지 여부
+        isTradingSuspendedException: "Boolean", // 거래 중지 예외
+        clientAgent: {
+          name: "String", // 성명
+          position: "String", // 직책
+          extension: "String", // 내선번호
+          email: "String", // 이메일
+          phoneNumber: "String", // 자택전화
+          agent2Name: "String", // 담당자2
+          agent2CellPhoneNumber: "String", // 휴대폰2
+          agent2PhoneNumber: "String", // 연락처2
+          agent2Email: "String", // 이메일2}
+        },
+      },
+      clientList: [],
     };
+  },
+  created() {
+    const vm = this;
+    vm.loadCodeData();
+  },
+  methods: {
+    async loadCodeData() {
+      const vm = this;
+      // await axios
+      //   .get(`http://localhost:8080/deal/now-page-cnt?dealDate=${vm.date}`)
+      //   .then((res) => {
+      //     console.log(res);
+      //     vm.number = res + 1;
+      //     vm.currentCnt = data + 1;
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     alert("순서 조회 에러 발생");
+      //   });
+    },
   },
 };
 </script>
