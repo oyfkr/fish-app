@@ -50,4 +50,12 @@ class ClientController(
 
         return ResponseEntity.ok().build()
     }
+
+    @GetMapping("/now-code")
+    fun getClientLatestCode() : ResponseEntity<Int>{
+
+        val accountName = SecurityContextHolder.getContext().authentication.name;
+
+        return ResponseEntity.ok(clientService.getClientLatestCode(accountName));
+    }
 }

@@ -113,8 +113,6 @@ CREATE TABLE client_agent (
                               agent_2_cell_phone_number VARCHAR(255),
                               agent_2_phone_number VARCHAR(255),
                               agent_2_email VARCHAR(255),
-                              client_id BIGINT UNIQUE,
                               created_date TIMESTAMP NOT NULL,
-                              modified_date TIMESTAMP,
-                              FOREIGN KEY (client_id) REFERENCES client(id)
+                              modified_date TIMESTAMP
 );
