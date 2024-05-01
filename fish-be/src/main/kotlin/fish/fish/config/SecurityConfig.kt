@@ -43,26 +43,21 @@ class SecurityConfig(
                 headers -> headers.frameOptions { it.sameOrigin() }
             }
             .csrf {
-//                it.disable()
                     it.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 it.ignoringRequestMatchers(AntPathRequestMatcher("/h2-console/**"))
+                it.ignoringRequestMatchers(AntPathRequestMatcher("/login"))
             }
             .formLogin { login ->
-//                login.loginPage("/login-page")
                 login.usernameParameter("username")
                 login.passwordParameter("password")
                 login.loginProcessingUrl("/login")
-                login.defaultSuccessUrl("/home",true)
+                login.successForwardUrl("/success")
                 login.failureUrl("/login-fail")
             }
-//            .sessionManagement{
-//                it.invalidSessionUrl("/login")
-////                it.
-//            }
             .authorizeHttpRequests { request ->
-//                request.requestMatchers("/**").permitAll()
                 request.requestMatchers("/login-page").permitAll()
                 request.requestMatchers("/login").permitAll()
+                request.requestMatchers("/success").permitAll()
                 request.requestMatchers("/csrf-token").permitAll()
                 request.requestMatchers("/login-fail").permitAll()
                 request.requestMatchers("/accounts").permitAll()

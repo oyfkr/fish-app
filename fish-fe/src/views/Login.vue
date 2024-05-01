@@ -51,7 +51,7 @@ export default {
       }
 
       vm.isLoading = true;
-      vm.xhrToken = await vm.getToken();
+      // vm.xhrToken = await vm.getToken();
       await axios
         .post(
           `http://localhost:8080/login`,
@@ -59,7 +59,7 @@ export default {
           {
             headers: {
               "Content-type": "multipart/form-data",
-              "X-XSRF-TOKEN": vm.xhrToken,
+              // "X-XSRF-TOKEN": vm.xhrToken,
             },
           }
         )
