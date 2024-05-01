@@ -20,7 +20,7 @@ class Fish(
 
     // 프로그램에서 코드로 사용 , account별 cnt가 초기화 필요
     @Column(name = "cnt")
-    var cnt : Int,
+    var code : Int,
 
     @Column(name = "name")
     var name : String,
@@ -97,7 +97,7 @@ class Fish(
 
     companion object {
         fun ofByCreateRequest(fishCreateRequest: FishCreateRequest, account: Account) : Fish {
-            return Fish(null, fishCreateRequest.cnt, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
+            return Fish(null, fishCreateRequest.code, fishCreateRequest.name, fishCreateRequest.purchasePrice, fishCreateRequest.salePrice, fishCreateRequest.major, fishCreateRequest.middle, fishCreateRequest.small, fishCreateRequest.weight, fishCreateRequest.properInventory, fishCreateRequest.registerDate, fishCreateRequest.vat, fishCreateRequest.inOutComeStatus, fishCreateRequest.image, fishCreateRequest.note,
                 fishCreateRequest.aPrice, fishCreateRequest.bPrice, fishCreateRequest.cPrice, fishCreateRequest.dPrice, fishCreateRequest.ePrice, account, true, LocalDateTime.now(), null)
         }
     }
@@ -105,7 +105,7 @@ class Fish(
     fun modifyFish(fishModifyRequest: FishModifyRequest) : Fish {
 
         this.name = fishModifyRequest.name
-        this.cnt = fishModifyRequest.cnt
+        this.code = fishModifyRequest.code
         this.purchasePrice = fishModifyRequest.purchasePrice
         this.salePrice = fishModifyRequest.salePrice
         this.major = fishModifyRequest.major
@@ -127,7 +127,7 @@ class Fish(
         return this
     }
 
-    fun isDisabled() {
+    fun changeToDisabled() {
         this.enabled = false
     }
 }

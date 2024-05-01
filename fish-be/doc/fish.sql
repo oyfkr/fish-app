@@ -62,3 +62,59 @@ e_price INTEGER,
 created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_date TIMESTAMP
 );
+
+-- 거래처 생성 쿼리
+CREATE TABLE client (
+                        id SERIAL PRIMARY KEY,
+                        processing_classification VARCHAR(255) NOT NULL,
+                        code INT NOT NULL,
+                        name VARCHAR(255) NOT NULL,
+                        tax_invoice_name VARCHAR(255),
+                        representation_name VARCHAR(255),
+                        phone_number VARCHAR(255),
+                        fax_number NUMERIC,
+                        cell_phone_number VARCHAR(255),
+                        transaction_start_date DATE,
+                        last_transaction_date DATE,
+                        unit_price_application VARCHAR(255),
+                        transaction_print_option VARCHAR(255),
+                        business_style VARCHAR(255),
+                        event VARCHAR(255),
+                        business_registration_number VARCHAR(255),
+                        sortation VARCHAR(255),
+                        bank_name VARCHAR(255),
+                        bank_account_number VARCHAR(255),
+                        bank_account_name VARCHAR(255),
+                        note TEXT,
+                        small_address VARCHAR(255),
+                        address TEXT,
+                        postal_code VARCHAR(255),
+                        street_number VARCHAR(255),
+                        enabled BOOLEAN NOT NULL,
+                        is_trading_suspended BOOLEAN NOT NULL,
+                        is_trading_suspended_exception BOOLEAN,
+                        client_agent_id BIGINT,
+                        account_id BIGINT NOT NULL,
+                        created_date TIMESTAMP NOT NULL,
+                        modified_date TIMESTAMP,
+                        FOREIGN KEY (client_agent_id) REFERENCES client_agent(id),
+                        FOREIGN KEY (account_id) REFERENCES account(id)
+);
+
+-- 거래처 담당자 생성 쿼리
+CREATE TABLE client_agent (
+                              id SERIAL PRIMARY KEY,
+                              name VARCHAR(255),
+                              position VARCHAR(255),
+                              extension VARCHAR(255),
+                              email VARCHAR(255),
+                              phone_number VARCHAR(255),
+                              agent_2_name VARCHAR(255),
+                              agent_2_cell_phone_number VARCHAR(255),
+                              agent_2_phone_number VARCHAR(255),
+                              agent_2_email VARCHAR(255),
+                              client_id BIGINT UNIQUE,
+                              created_date TIMESTAMP NOT NULL,
+                              modified_date TIMESTAMP,
+                              FOREIGN KEY (client_id) REFERENCES client(id)
+);

@@ -19,15 +19,15 @@ class FishRepositoryCustomImpl(
             .fetchOne()
     }
 
-    override fun findByCntAndAccount(cnt: Int, account: Account): Fish? {
+    override fun findByCntAndAccount(code: Int, account: Account): Fish? {
         return queryFactory.selectFrom(fish)
-            .where(fish.cnt.eq(cnt), fish.account.eq(account))
+            .where(fish.code.eq(code), fish.account.eq(account))
             .fetchOne()
     }
 
     override fun findAllByAccount(account: Account): List<Fish> {
         return queryFactory.selectFrom(fish)
-            .where(fish.enabled.eq(true), fish.account.eq(account))
+            .where(fish.enabled.eq(true), fish.account.eq(account), fish.enabled.eq(true))
             .fetch()
     }
 
@@ -36,5 +36,12 @@ class FishRepositoryCustomImpl(
             .where(fish.id.eq(id))
             .join(fish.account, account).fetchJoin()
             .fetchOne()
+    }
+
+    override fun findByAccountLast(accountName: String): Fish? {
+        return queryFactory.selectFrom(fish)
+            .where(fish.account.username.eq(accountName))
+            .orderBy(fish.id.desc())
+            .fetchFirst()
     }
 }

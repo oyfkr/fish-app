@@ -7,7 +7,7 @@ class FishCreateRequest(
 
     val name : String,
 
-    val cnt : Int,
+    val code : Int,
 
     val purchasePrice : Int?,
 

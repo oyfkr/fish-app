@@ -7,8 +7,9 @@ interface FishRepositoryCustom {
 
     fun findByName(name:String) : Fish?
 
-    fun findByCntAndAccount(cnt:Int, account: Account) : Fish?
+    fun findByCntAndAccount(code:Int, account: Account) : Fish?
 
     fun findAllByAccount(account: Account) : List<Fish>
     fun findByIdWithAccount(id: Long): Fish?
+    fun findByAccountLast(accountName: String): Fish?
 }
