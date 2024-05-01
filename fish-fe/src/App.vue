@@ -6,7 +6,7 @@ export default {
   created() {
     const vm = this;
     const loginInfo = window.sessionStorage.getItem("fish-login");
-    if (!loginInfo) vm.$router.push("/");
+    //if (!loginInfo) vm.$router.push("/");
   },
 };
 </script>

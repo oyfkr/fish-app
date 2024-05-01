@@ -673,7 +673,7 @@ export default {
       }
 
       vm.isLoading = true;
-      await vm.getToken();
+      vm.xhrToken = await vm.getToken();
 
       const sendData = {
         dealDate: vm.date,

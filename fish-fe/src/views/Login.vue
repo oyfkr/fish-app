@@ -2,8 +2,18 @@
   <div id="login-box">
     <div>
       <h5 class="mb-4">LOGIN</h5>
-      <input type="text" class="form-control mb-2" placeholder="ID" />
-      <input type="password" class="form-control mb-4" placeholder="PASSWORD" />
+      <input
+        type="text"
+        class="form-control mb-2"
+        placeholder="ID"
+        v-model="id"
+      />
+      <input
+        type="password"
+        class="form-control mb-4"
+        placeholder="PASSWORD"
+        v-model="password"
+      />
       <button class="btn btn-primary w-100 fw-bold py-2" @click="login">
         로그인
       </button>
@@ -13,17 +23,21 @@
 </template>
 <script>
 import Loading from "@/components/Loading.vue";
+import callsMixins from "@/mixins/callsMixins";
+
 export default {
   components: { Loading },
+  mixins: [callsMixins],
   data() {
     return {
       id: "",
       password: "",
+      xhrToken: "",
       isLoading: false,
     };
   },
   methods: {
-    login() {
+    async login() {
       const vm = this;
       if (!vm.id) {
         alert("아이디를 입력해주세요.");
@@ -36,11 +50,22 @@ export default {
       }
 
       vm.isLoading = true;
-      axios
-        .get(`http://localhost:8080/login`)
+      vm.xhrToken = await vm.getToken();
+      await axios
+        .post(
+          `http://localhost:8080/login`,
+          { data: JSON.stringify(sendData) },
+          {
+            headers: {
+              "Content-type": "application/json",
+              "X-XSRF-TOKEN": vm.xhrToken,
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           window.sessionStorage.setItem("fish-login", JSON.stringify(res));
+          vm.$router.push("/link-menu");
         })
         .catch((err) => {
           console.log(err);
